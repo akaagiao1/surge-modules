@@ -1,0 +1,13 @@
+#!name=节点 TCPing 连通性测试（Surge）
+#!desc=检测指定节点入口的 TCP 连通性及是否疑似被 GFW 定向阻断。Surge 无法自动读取节点底层地址和端口，请在参数中填写。
+#!arguments=POLICY:Proxy,NODE_HOST:example.com,NODE_PORT:443,NODE_TYPE:TCP,API_POLICY:Proxy,MASK_IP:true
+#!arguments-desc=POLICY：检测出口策略；NODE_HOST/NODE_PORT：节点服务器地址和端口；NODE_TYPE：协议类型；API_POLICY：Globalping API 使用的策略；MASK_IP：隐藏部分 IP
+
+[Rule]
+DOMAIN,api.globalping.io,{{{API_POLICY}}}
+
+[Panel]
+节点 TCPing 连通性测试 = title="点击刷新开始检测", content="策略：{{{POLICY}}}\n目标：{{{NODE_HOST}}}:{{{NODE_PORT}}}", icon=network.badge.shield.half.filled, script-name=节点 TCPing 连通性测试
+
+[Script]
+节点 TCPing 连通性测试 = type=generic, timeout=60, argument="policy={{{POLICY}}}&address={{{NODE_HOST}}}&port={{{NODE_PORT}}}&type={{{NODE_TYPE}}}&mask={{{MASK_IP}}}", script-path=https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/nodetcpcheck/nodetcpcheck.js
