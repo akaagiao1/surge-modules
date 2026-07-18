@@ -1,0 +1,9 @@
+#!name=节点质量查询（Surge）
+#!desc=在策略选择页通过信息面板查询指定策略组当前出口的 IP 质量。POLICY 请填写 Surge 中已有的策略或策略组名称。
+#!arguments=POLICY=Proxy&MASK_IP=true
+
+[Panel]
+节点质量查询 = title="点击刷新以检测", content="策略：%POLICY%", icon=network.badge.shield.half.filled, script-name=节点质量查询
+
+[Script]
+节点质量查询 = type=generic, timeout=30, argument="policy=%POLICY%&mask=%MASK_IP%", script-path=iptest-surge.js
