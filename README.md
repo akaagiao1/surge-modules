@@ -44,12 +44,11 @@ https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/nodetcpch
 
 ### YouTube 送中检测
 
-在 Surge Mac 菜单栏的「面板」中打开「YouTube 送中检测」，点击刷新即可检测 `Proxy` 的所有本地节点。脚本通过各节点访问 YouTube Premium，复测确认后把被判为中国大陆地区的节点从 `Proxy` 候选中剔除。已剔除的节点在确认恢复正常后会加回。遇到超时或地区无法判定时，保留节点原有的候选状态。
+点击「YouTube 送中检测」面板的刷新按钮即可检测 `Proxy` 的所有本地节点。脚本通过各节点访问 YouTube Premium，复测确认后把被判为中国大陆地区的节点从 `Proxy` 候选中剔除。已剔除的节点在确认恢复正常后会加回。遇到超时或地区无法判定时，保留节点原有的候选状态。
 
-安装链接
+安装和使用
 
-```text
-https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/youtube-proxy-check/youtube-proxy-check.sgmodule
-```
+- Mac 6.11.0 或以上版本。在菜单栏的 Surge 图标中展开「面板」，刷新「YouTube 送中检测」。[Mac 安装链接](https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/youtube-proxy-check/youtube-proxy-check.sgmodule)
+- Surge iOS 6.0 或以上版本。在模块页面选择「从 URL 安装模块」，启用后到策略选择页刷新「YouTube 送中检测」。面板需要有效的功能订阅。[iOS 安装链接](https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/youtube-proxy-check/youtube-proxy-check-ios.sgmodule)
 
-需要 Surge Mac 6.11.0 或以上版本，以及可编辑的 `Proxy` Smart 策略组，且该组通过 `include-all-proxies=1` 或 `include-all-proxies=true` 纳入本地节点。剔除结果写入 `Proxy` 的筛选项，适用于所有走该组的流量。如果 `Proxy` 已有自定义筛选，面板会提示检查设置。
+需要可编辑的 `Proxy` Smart 策略组，且该组通过 `include-all-proxies=1` 或 `include-all-proxies=true` 纳入本地节点。剔除结果写入 `Proxy` 的筛选项，适用于所有走该组的流量。如果 `Proxy` 已有自定义筛选，面板会提示检查设置。
