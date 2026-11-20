@@ -41,3 +41,15 @@ https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/nodetcpch
 - `MASK_IP`：是否隐藏部分 IP
 
 > Surge 不会向面板脚本提供所选节点的底层服务器地址和端口，因此 `NODE_HOST` 和 `NODE_PORT` 需要手动填写。
+
+### YouTube 送中检测
+
+在 Surge Mac 菜单栏的「面板」中打开「YouTube 送中检测」，点击刷新即可检测 `Proxy` 的所有本地节点。脚本通过各节点访问 YouTube Premium，复测确认后把被判为中国大陆地区的节点从 `Proxy` 候选中剔除。已剔除的节点在确认恢复正常后会加回。遇到超时或地区无法判定时，保留节点原有的候选状态。
+
+安装链接
+
+```text
+https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/youtube-proxy-check/youtube-proxy-check.sgmodule
+```
+
+需要 Surge Mac 6.11.0 或以上版本，以及可编辑的 `Proxy` Smart 策略组，且该组通过 `include-all-proxies=1` 或 `include-all-proxies=true` 纳入本地节点。剔除结果写入 `Proxy` 的筛选项，适用于所有走该组的流量。如果 `Proxy` 已有自定义筛选，面板会提示检查设置。

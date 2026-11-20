@@ -1,0 +1,11 @@
+#!name=YouTube 送中检测
+#!desc=点击面板刷新，逐个检测 Proxy 的 YouTube Premium 地区，并从 Proxy 排除确认送中的节点。
+#!version=1.0.0
+#!system=mac
+#!requirement=CORE_VERSION>=6011000
+
+[Panel]
+yt-proxy-check = title="YouTube 送中检测", content="点击刷新，检查 Proxy 节点并排除送中出口。", style=info, script-name=yt-proxy-check
+
+[Script]
+yt-proxy-check = type=generic, script-path=https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/youtube-proxy-check/youtube-proxy-check.js, timeout=55
