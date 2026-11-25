@@ -1,0 +1,16 @@
+#!name=追更提醒 + TMDB
+#!desc=沿用原版追更通知，新增 TMDB 排期面板和可选的播出通知。
+#!version=1.0.0
+#!category=工具
+#!arguments=WATCHLIST:-,TMDB_TOKEN:-,TMDB_WATCHLIST:-,TMDB_NOTIFY:false
+#!arguments-desc=WATCHLIST：原版剧单，多部用分号分开，最多 5 部。\nTMDB_TOKEN：在 Surge 填入 TMDB API Read Access Token 以启用排期。\nTMDB_WATCHLIST：默认沿用原版剧单，也可填写剧名（首播年份）、剧名 S02 或 tmdb:1396。\nTMDB_NOTIFY：默认 false，设为 true 后每 30 分钟检查 TMDB 播出日期，首次静默。仅有日期时按北京时间当日结束计算。\n数据来源：TMDB。This product uses the TMDB API but is not endorsed or certified by TMDB.\n原版追更脚本：许舟。若已安装原模块，请先停用原模块。
+
+[Panel]
+episode-watch-upstream = title="追更提醒", content="填写 WATCHLIST 后查询追更进度。", script-name=episode-watch-upstream, update-interval=1800
+episode-watch-tmdb = title="TMDB 排期", content="填写 TMDB_TOKEN 后查询播出日期。", script-name=episode-watch-tmdb, update-interval=1800
+
+[Script]
+episode-watch-upstream = type=generic, script-path=https://raw.githubusercontent.com/zhiaon/Modules/2023610554c60db4e2293039220788c176eac3db/surge_scripts/episode-watch.js, argument="panel|{{{WATCHLIST}}}", timeout=75, engine=jsc
+episode-watch-upstream-cron = type=cron, cronexp="*/30 * * * *", script-path=https://raw.githubusercontent.com/zhiaon/Modules/2023610554c60db4e2293039220788c176eac3db/surge_scripts/episode-watch.js, argument="cron|{{{WATCHLIST}}}", timeout=75, engine=jsc, wake-system=true
+episode-watch-tmdb = type=generic, script-path=https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/episode-watch/episode-watch-tmdb.js, argument="panel|{{{TMDB_TOKEN}}}|{{{TMDB_NOTIFY}}}|{{{TMDB_WATCHLIST}}}|{{{WATCHLIST}}}", timeout=40, engine=jsc
+episode-watch-tmdb-cron = type=cron, cronexp="*/30 * * * *", script-path=https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/episode-watch/episode-watch-tmdb.js, argument="cron|{{{TMDB_TOKEN}}}|{{{TMDB_NOTIFY}}}|{{{TMDB_WATCHLIST}}}|{{{WATCHLIST}}}", timeout=40, engine=jsc, wake-system={{{TMDB_NOTIFY}}}

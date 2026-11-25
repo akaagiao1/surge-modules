@@ -52,3 +52,18 @@ https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/nodetcpch
 - Surge iOS 6.0 或以上版本。在模块页面选择「从 URL 安装模块」，启用后到策略选择页刷新「YouTube 送中检测」。面板需要有效的功能订阅。[iOS 安装链接](https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/youtube-proxy-check/youtube-proxy-check-ios.sgmodule)
 
 需要可编辑的 `Proxy` Smart 策略组，且该组通过 `include-all-proxies=1` 或 `include-all-proxies=true` 纳入本地节点。剔除结果写入 `Proxy` 的筛选项，适用于所有走该组的流量。如果 `Proxy` 已有自定义筛选，面板会提示检查设置。
+
+### 追更提醒 + TMDB
+
+模块包含两个面板。「追更提醒」沿用许舟的原版脚本查询平台进度并发送通知。「TMDB 排期」显示最近已播集和下一集的播出日期。国内平台的会员及免费更新进度以平台为准。若已安装旧模块，请停用旧模块，再把原剧单填入新版。已有的原版追更记录可以继续使用。[安装模块](https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/episode-watch/episode-watch.sgmodule) · [原版脚本](https://github.com/zhiaon/Modules/blob/2023610554c60db4e2293039220788c176eac3db/surge_scripts/episode-watch.js)
+
+- `WATCHLIST` 填原版剧单，多部用分号分开，最多 5 部。
+- `TMDB_TOKEN` 在 Surge 的模块设置里填写自己的 **API Read Access Token**。留空时仍可使用原版追更。[TMDB API 设置](https://www.themoviedb.org/settings/api)
+- `TMDB_WATCHLIST` 默认沿用 `WATCHLIST`，也可填写独立剧单。例如 `Breaking Bad（2008）`、`tmdb:1396 S02` 或 `tmdb:1396 S02E03`。只用 TMDB 时，将 `WATCHLIST` 留空。
+- `TMDB_NOTIFY` 默认 `false`。设为 `true` 可开启额外的「TMDB 播出提醒」，它按北京时间当天结束判断播出日期。首次检查静默建立记录。原版和 TMDB 都追同一部时，可能在不同时间各提醒一次。请在 iOS 设置中允许 Surge 通知。
+
+#### 数据来源
+
+[![TMDB](https://www.themoviedb.org/assets/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg)](https://www.themoviedb.org/)
+
+This product uses the TMDB API but is not endorsed or certified by TMDB.
