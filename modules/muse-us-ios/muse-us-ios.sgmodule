@@ -1,0 +1,11 @@
+#!name=Muse US 自动化（iOS）
+#!desc=提供快捷指令使用的 Muse-US-On 和 Muse-US-Off。需在当前配置中添加分流规则，安装步骤见仓库 README。
+#!version=1.0.0
+#!system=ios
+#!category=工具
+
+[Script]
+Muse-US-On = type=generic, script-path=https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/muse-us-ios/Muse-Window.js, argument=open
+Muse-US-Off = type=generic, script-path=https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/muse-us-ios/Muse-Window.js, argument=close
+Muse-US-Active = type=rule, script-path=https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/muse-us-ios/Muse-Window.js, argument=match
+Save-Muse-iOS = type=rule, script-path=https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/rule-storage/Rule-Storage.js, argument=region=muse-ios&exact=1&quantity=1&matched=1

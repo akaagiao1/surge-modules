@@ -11,6 +11,7 @@
 | [YouTube 送中检测](#youtube-送中检测) | 逐个检测本地节点，并更新 `Proxy` 组的候选节点 | [iOS][youtube-ios] · [Mac][youtube-mac] |
 | [追更提醒与 TMDB](#追更提醒与-tmdb) | 查看平台更新进度和 TMDB 排期，按需接收提醒 | [安装模块][episode-watch] |
 | [域名规则收集](#域名规则收集) | 从实际请求积累域名规则，导出后用于分流 | [安装模块][rule-storage] |
+| [Muse US 自动化](#muse-us-自动化) | iOS 使用 Muse 时，让走到收集规则的请求使用美国策略 | [iOS][muse-us-ios] |
 
 ## 安装与使用
 
@@ -128,12 +129,25 @@ AND,((PROCESS-NAME,Telegram),(SCRIPT,Save-Telegram-Rule)),DIRECT
 
 本模块改编自 [NobyDa 的 Rule-Storage.js][rule-storage-source]，按 [GPL-3.0](modules/rule-storage/LICENSE) 发布。
 
+## Muse US 自动化
+
+1. 在 Surge iOS 启用 [Muse US 自动化模块][muse-us-ios]。如果此前在配置里手动添加了 `Muse-US-On`、`Muse-US-Off`、`Muse-US-Active`、`Save-Muse-iOS` 的脚本声明，可以删除这四条本地声明，由模块提供。
+2. 在当前配置的 `[Rule]` 中加入下方规则，放在已有的明确分流规则之后、通用 `GEOIP` 和 `FINAL` 之前。把 `US` 换成已有的美国策略组名。
+3. 在 iPhone 的「快捷指令 → 自动化」中分别设置 Muse 的「已打开」和「已关闭」。在「在后台运行定时或事件脚本」动作中，打开时选 `Muse-US-On`，关闭时选 `Muse-US-Off`。两条都选立即运行，参数留空。
+
+```ini
+AND,((SCRIPT,Muse-US-Active),(SCRIPT,Save-Muse-iOS)),US
+```
+
+切离 Muse 时关闭分流窗口，窗口也会在开启 15 分钟后自动到期。在这段时间里，走到这条规则的请求会使用 `US`，其中包括可能碰巧经过同一规则的后台请求。自动记录保存在 `Rule-Storage-muse-ios`，可用原导出快捷指令读取并单独保存为候选域名列表。
+
 [iptest]: https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/iptest/iptest.sgmodule
 [tcping]: https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/nodetcpcheck/nodetcpcheck.sgmodule
 [youtube-ios]: https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/youtube-proxy-check/youtube-proxy-check-ios.sgmodule
 [youtube-mac]: https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/youtube-proxy-check/youtube-proxy-check.sgmodule
 [episode-watch]: https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/episode-watch/episode-watch.sgmodule
 [rule-storage]: https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/rule-storage/rule-storage.sgmodule
+[muse-us-ios]: https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/muse-us-ios/muse-us-ios.sgmodule
 [rule-storage-script]: https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/rule-storage/Rule-Storage.js
 [rule-storage-upstream]: https://nobyda.github.io/2024/02/24/Surge_Rule_Storage/
 [rule-storage-export]: https://nobyda.github.io/2024/02/24/Surge_Rule_Storage/#配置快捷指令
