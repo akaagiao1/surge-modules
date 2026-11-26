@@ -77,15 +77,17 @@ This product uses the TMDB API but is not endorsed or certified by TMDB.
 | `Save-China-Rule` | `Rule-Storage-china` | 按配置报告命中，由调用它的规则指定策略 |
 | `Save-Final-Rule` | `Rule-Storage-global` | 记录请求后继续匹配后续规则 |
 
+### 已安装：更新到 1.1
+
+更新 [模块][rule-storage] 和远程脚本资源即可，`[Rule]`、已生成的规则文件与导出键不用改。分流时不再下载公共后缀表。有需要可从脚本列表手动运行 `Refresh-Rule-Storage-PSL`；新版也会每天 04:17 检查缓存，7 天后才会重新下载，下载失败保留旧缓存。没有有效缓存时，新记录先存为精确 `DOMAIN`，之后不会自动把旧记录扩大为后缀规则。
+
 ### 从 NobyDa 原版迁移
 
-安装并启用本仓库的模块，移除原配置 `[Script]` 中这两个同名声明。现有的 `[Rule]`、生成的规则集和导出快捷指令可以继续使用。如果旧声明自定义了 `key`、`quantity` 或 `interval`，也可以采用手动迁移，只替换两行中的 `script-path`，保留原参数和快捷指令的缓存键。 [新版脚本 URL][rule-storage-script] · [NobyDa 原文][rule-storage-upstream]
+安装并启用本仓库的模块，移除原配置 `[Script]` 中这两个同名声明。现有的 `[Rule]`、生成的规则集和导出快捷指令可以继续使用。如果旧声明自定义了 `key`、`quantity` 或 `interval`，也可以采用手动迁移，只替换两行中的 `script-path`，保留原参数和快捷指令的缓存键；手动添加刷新脚本时传同一个 `key`。 [新版脚本 URL][rule-storage-script] · [NobyDa 原文][rule-storage-upstream]
 
 ### 首次配置
 
-1. 安装并启用模块。将下列两条收集规则放在已有业务规则之后、普通的 `GEOIP,CN` 和 `FINAL` 之前。示例假设大陆 IP 直连，其他请求走已有的 `Proxy` 策略。已有 `FINAL` 时，合并到现有配置并保留唯一的 `FINAL`。
-2. 在用来导出的设备上开启 Surge 的 HTTP API 与 iCloud 同步，导入 NobyDa 的快捷指令，按提示填入 HTTP API 端口和密码。 [导出快捷指令][rule-storage-shortcut] · [原文导出说明][rule-storage-export]
-3. 让流量积累一段时间，再运行快捷指令。原版默认在 iCloud 的 Surge 文件夹下生成 `Rule/Domestic_Set.txt` 和 `Rule/Foregn_Set.txt`。在 Surge 的「最近请求」里可以看到请求最终命中的规则和策略。
+安装并启用模块。将下列两条收集规则放在已有业务规则之后、普通的 `GEOIP,CN` 和 `FINAL` 之前。示例假设大陆 IP 直连，其他请求走已有的 `Proxy` 策略；策略名不同就换成自己的。已有 `FINAL` 时，合并到现有配置并保留唯一的 `FINAL`。
 
 ```ini
 [Rule]
@@ -96,6 +98,16 @@ FINAL,Proxy,dns-failed
 ```
 
 这个例子用 `GEOIP,CN` 检查目标 IP。已被前面的规则处理的请求会跳过收集。若规则匹配时 DNS 查询失败，示例里的 `dns-failed` 会直接使用 `FINAL` 策略，这次请求也会跳过收集。 [Surge 匹配顺序][surge-rules] · [FINAL 选项][surge-final]
+
+### 导出候选规则
+
+**沿用旧快捷指令：** 在导出设备上按 [NobyDa 的方法][rule-storage-export] 配置 HTTP API 与 iCloud 同步，再运行[原导出快捷指令][rule-storage-shortcut]。它默认把新记录合并到 `Rule/Domestic_Set.txt` 与 `Rule/Foregn_Set.txt`，并清空已导出的收集缓存。
+
+**Surge iOS 6 免密导出：** 新建快捷指令，添加 Surge 的[「调用 HTTP API」][surge-shortcuts]动作。此方式不需要 HTTP API 监听、端口或密码，但 Surge 引擎需要运行中。
+
+1. 方法 `POST`，路径 `/v1/scripting/evaluate`；请求体字段 `script_text` 填 [export-ios6.js][rule-storage-export-js] 的文本，`mock_type` 填 `cron`。可参考[完整请求体](modules/rule-storage/export-ios6-body.json)。
+2. 添加「从输入获取词典」，再取 `result` 词典中的 `china` 或 `global`，接「快速查看」即可预览。这个导出脚本只读，不清空收集缓存，也不修改 Surge 配置。
+3. 预览后把需要的规则**合并**进现有规则文件，不要用空候选或只有新增项的结果覆盖正在使用的名单。
 
 文件生成后，先检查内容，再把下面两条放到收集规则前、手写例外后。域名如果已出现在两份名单里，排在前面的规则集优先。
 
@@ -149,6 +161,8 @@ AND,((SCRIPT,Muse-US-Active),(SCRIPT,Save-Muse-iOS)),US
 [rule-storage]: https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/rule-storage/rule-storage.sgmodule
 [muse-us-ios]: https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/muse-us-ios/muse-us-ios.sgmodule
 [rule-storage-script]: https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/rule-storage/Rule-Storage.js
+[rule-storage-export-js]: https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/rule-storage/export-ios6.js
+[surge-shortcuts]: https://manual.nssurge.com/tools/http-api.html#shortcuts-ios-600
 [rule-storage-upstream]: https://nobyda.github.io/2024/02/24/Surge_Rule_Storage/
 [rule-storage-export]: https://nobyda.github.io/2024/02/24/Surge_Rule_Storage/#配置快捷指令
 [rule-storage-shortcut]: https://www.icloud.com/shortcuts/39c9a8720c9a49288ac1a2bf433da098

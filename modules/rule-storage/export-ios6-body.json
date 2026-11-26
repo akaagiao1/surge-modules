@@ -1,0 +1,5 @@
+{
+  "script_text": "// Read-only export: use as script_text for POST /v1/scripting/evaluate.\n// With Surge iOS 6, use the native \"Call HTTP API\" Shortcuts action.\nconst rows = {};\nfor (const region of ['china', 'global']) {\n  const raw = $persistentStore.read(`Rule-Storage-${region}`) || '';\n  rows[region] = [...new Set(raw.split(/\\r?\\n/).map(line => {\n    const rule = line.split(/\\/\\/|#|;/, 1)[0].trim();\n    const match = rule.match(/^(?:(DOMAIN(?:-SUFFIX)?),\\s*)?(\\.?[\\p{L}\\p{M}\\p{N}.-]+)$/iu);\n    if (!match) return '';\n    const bare = match[2].replace(/^\\./, '').replace(/\\.$/, '').toLowerCase();\n    if (!bare.includes('.') || bare.split('.').some(label => !label || label.length > 63 || /^-|-$/.test(label))) return '';\n    const type = match[1]?.toUpperCase() || (match[2].startsWith('.') ? 'DOMAIN-SUFFIX' : 'DOMAIN');\n    return `${type},${bare}`;\n  }).filter(Boolean))].join('\\n');\n}\n$done(rows);\n",
+  "mock_type": "cron",
+  "timeout": 5
+}

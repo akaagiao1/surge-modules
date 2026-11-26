@@ -1,10 +1,12 @@
 #!name=域名规则收集
-#!desc=为现有分流规则提供域名收集脚本，兼容 NobyDa 的导出快捷指令。需要在配置中引用脚本。
-#!version=1.0.0
+#!desc=为现有分流规则收集域名，兼容 NobyDa 导出。请在主配置中引用规则脚本；公共后缀表可定时或手动刷新。
+#!version=1.1.0
 #!category=工具
 #!arguments=EXACT:false
 #!arguments-desc=EXACT 设为 true 时，新生成的规则只匹配完整主机名。
 
 [Script]
-Save-Final-Rule = type=rule, script-path=https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/rule-storage/Rule-Storage.js, argument="region=global&exact={{{EXACT}}}"
-Save-China-Rule = type=rule, script-path=https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/rule-storage/Rule-Storage.js, argument="region=china&matched=1&exact={{{EXACT}}}"
+Save-Final-Rule = type=rule, engine=jsc, script-path=https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/rule-storage/Rule-Storage.js, argument="region=global&exact={{{EXACT}}}"
+Save-China-Rule = type=rule, engine=jsc, script-path=https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/rule-storage/Rule-Storage.js, argument="region=china&matched=1&exact={{{EXACT}}}"
+Refresh-Rule-Storage-PSL = type=generic, script-path=https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/rule-storage/Rule-Storage.js, timeout=12, argument="action=refresh-psl"
+Refresh-Rule-Storage-PSL-Daily = type=cron, cronexp="17 4 * * *", script-path=https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/rule-storage/Rule-Storage.js, timeout=12, argument="action=refresh-psl"
