@@ -67,3 +67,13 @@ https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/nodetcpch
 [![TMDB](https://www.themoviedb.org/assets/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg)](https://www.themoviedb.org/)
 
 This product uses the TMDB API but is not endorsed or certified by TMDB.
+
+### 域名规则收集
+
+[安装模块](https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/rule-storage/rule-storage.sgmodule)。模块提供 `Save-Final-Rule` 和 `Save-China-Rule` 两个脚本声明。已有 NobyDa 配置的用户可以移除原 `[Script]` 中这两条同名声明，继续沿用原 `[Rule]` 及快捷指令。首次使用请按原文添加调用脚本的逻辑规则。缓存输出键仍是 `Rule-Storage-global` 和 `Rule-Storage-china`。[NobyDa 配置教程](https://nobyda.github.io/2024/02/24/Surge_Rule_Storage/#配置规则)
+
+- `EXACT` 默认为 `false`。设为 `true` 后，新记录只生成 `DOMAIN,完整主机名`。已导出的规则需要在原规则集里编辑。
+- 默认按至少间隔 30 秒的 10 次出现记录域名。只有请求走到引用脚本的规则时才会计数。
+- 收集 Mac 上某个 App 时，可以在其余分流规则之前用 `PROCESS-NAME` 配合单独的脚本声明，例如传入 `region=myapp&exact=1`，用快捷指令读取 `Rule-Storage-myapp`。iOS 上只能根据测试时段和请求记录判断域名归属。
+
+脚本改编自 [NobyDa 的 Rule-Storage.js](https://github.com/NobyDa/Script/blob/10d1426d9d60edb37e24451b28811b163efc8e43/Rule-Storage/Rule-Storage.js)，以 [GPL-3.0](modules/rule-storage/LICENSE) 发布。

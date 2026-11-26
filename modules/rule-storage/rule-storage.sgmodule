@@ -1,0 +1,10 @@
+#!name=域名规则收集
+#!desc=为现有分流规则提供域名收集脚本，兼容 NobyDa 的导出快捷指令。需要在配置中引用脚本。
+#!version=1.0.0
+#!category=工具
+#!arguments=EXACT:false
+#!arguments-desc=EXACT 设为 true 时，新生成的规则只匹配完整主机名。
+
+[Script]
+Save-Final-Rule = type=rule, script-path=https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/rule-storage/Rule-Storage.js, argument="region=global&exact={{{EXACT}}}"
+Save-China-Rule = type=rule, script-path=https://raw.githubusercontent.com/akaagiao1/surge-modules/main/modules/rule-storage/Rule-Storage.js, argument="region=china&matched=1&exact={{{EXACT}}}"
